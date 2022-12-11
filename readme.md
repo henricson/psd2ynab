@@ -12,6 +12,13 @@ This program is provided as-is, without any warranty under the GNU GENERAL PUBLI
 responsible for any damage caused by this program. Please be careful as this program will access your financial
 information (read-only).
 
+This program uses Nordigen to access your financial information. Nordigen is a third party and is not affiliated with
+this project in any way. Please read
+their [End User Privacy Policy](https://nordigen.com/en/company/privacy-policy-end-user/).
+
+**⚠️ Nordigen has a freemium model, and might sell anonymized or pseudonymized data to third parties, including your
+transaction details! ⚠️**
+
 ## Why does this exist
 
 YNAB has a feature for linked-import, meaning that YNAB can import transactions from your bank. However, this feature is
