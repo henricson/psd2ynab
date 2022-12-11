@@ -12,6 +12,8 @@ This program is provided as-is, without any warranty under the GNU GENERAL PUBLI
 responsible for any damage caused by this program. Please be careful as this program will access your financial
 information (read-only).
 
+## Privacy
+
 This program uses Nordigen to access your financial information. Nordigen is a third party and is not affiliated with
 this project in any way. Please read
 their [End User Privacy Policy](https://nordigen.com/en/company/privacy-policy-end-user/).
@@ -19,6 +21,10 @@ their [End User Privacy Policy](https://nordigen.com/en/company/privacy-policy-e
 **⚠️ Nordigen has a freemium model, and might sell anonymized or pseudonymized data to third parties, possibly including
 your
 transaction details! ⚠️**
+
+This project is looking for options to replace Nordigen with a more privacy-friendly alternative. However, a direct PSD2
+integration towards banks seems tedious, as it requires a lot of compliance related work and fees to authorities. Input
+is valued!
 
 ## Why does this exist
 
