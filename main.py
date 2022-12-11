@@ -43,30 +43,31 @@ def cache_requisition(requsition_object):
         convert_file.write(json.dumps(requsition_object))
 
 
-def check_valid_requisition():
+def check_valid_requisition(bank_id):
     if not os.path.exists('requisition_cache.txt'):
         return False
     with open('requisition_cache.txt', 'r') as requisition_file:
         requisition_object = json.loads(requisition_file.read())
         if (datetime.now(timezone.utc) - datetime.strptime(requisition_object["created"],
-                                                           "%Y-%m-%dT%H:%M:%S.%f%z")).days < 89:
+                                                           "%Y-%m-%dT%H:%M:%S.%f%z")).days < 89 and bank_id == \
+                requisition_object["institution_id"]:
             return requisition_object
+        print("Please log in again.")
         return False
 
 
 def create_requisition(token, bank_id):
-    requisition_cache = check_valid_requisition()
+    requisition_cache = check_valid_requisition(bank_id)
     if requisition_cache is False:
         response = requests.post('https://ob.nordigen.com/api/v2/requisitions/',
                                  headers={"Authorization": "Bearer " + token},
                                  data={"institution_id": bank_id, "redirect": "https://www.google.com"})
         response.raise_for_status()
         jsonResponse = response.json()
-        cache_requisition(jsonResponse)
         print(
             "Please go to the following link and log in to your bank account. Please come back to the CLI when you are done.")
         print(jsonResponse["link"])
-        input("Please press enter to continue when you have completed the login.")
+        input("\nPlease press enter to continue when you have completed the login.\n")
         return jsonResponse
     else:
         return requisition_cache
@@ -121,7 +122,6 @@ def map_transactions_to_ynab(psd2_transactions):
                                                                                                       "")}
                          for t in
                          transactions]
-    print(ynab_transactions)
     return ynab_transactions
 
 
@@ -144,39 +144,56 @@ def prompt_bank():
     print("Please select the bank you want to connect to (country code set to: " + country_code + "):")
     for (key, value) in enumerate(banks):
         print(str(key) + ": ", value["name"])
-    bank_id_local = input("Enter the index of the bank you wish to link: ")
+    bank_id_local = input("\nEnter the index of the bank you wish to link: ")
     if not bank_id_local.isdigit():
         print("Please enter a valid number.")
         prompt_bank()
     return bank_id_local
 
 
+def prompt_account():
+    account_id_local = input("\nEnter the index of the account you wish to import: ")
+    if not account_id_local.isdigit():
+        print("Please enter a valid number.")
+        prompt_account()
+    return account_id_local
+
+
+def get_account_task(value, token):
+    account_details = get_account_details(token, value)
+    return {"name": account_details["name"], "id": value}
+
+
 if __name__ == '__main__':
+    import multiprocessing
+    from multiprocessing import freeze_support
+
     try:
         token = aquire_token(nordgen_client_id, nordgen_client_secret)
         banks = list_banks(token, country_code)
 
         bank_id = prompt_bank()
         requisition = create_requisition(token, banks[int(bank_id)]["id"])
+        cache_requisition(requisition)
         accounts = list_accounts(token, requisition["id"])
-        print(accounts)
         available_account_ids = []
-        for (key, value) in enumerate(accounts):
-            account_details = get_account_details(token, value)
-            available_account_ids.append(str(key) + ": " + account_details["name"])
-        print("Select the account you want to import transactions from:")
-        for account in available_account_ids:
-            print(account)
-        account_id = input("Enter the index: ")
-        if not account_id.isdigit():
-            print("Please enter a valid number. Exiting.")
-            exit(1)
-        transactions = list_transactions(token, accounts[int(account_id)])
+        print("\nAvailable accounts:\n")
+
+        with multiprocessing.Pool() as pool:
+            # call the function for each item in parallel, get results as tasks complete
+            for key, bank in enumerate(pool.starmap(get_account_task, [(a, token) for a in accounts])):
+                available_account_ids.append(bank["id"])
+                print(str(key) + ": " + bank["name"])
+
+        account_id = prompt_account()
+        print("\nFetching and importing transactions into YNAB....\n")
+        transactions = list_transactions(token, available_account_ids[int(account_id)])
         ynab_transactions = map_transactions_to_ynab(transactions)
-        print(ynab_transactions)
         import_response = ynab_upload_transactions(ynab_transactions)
-        print(str(len(ynab_transactions)) + " transactions uploaded to YNAB.")
-        print(import_response)
+
+        print(str(len(import_response["data"]["transaction_ids"])) + " transactions uploaded to YNAB.")
+        print(str(len(
+            import_response["data"]["duplicate_import_ids"])) + " duplicante transactions not uploaded to YNAB.")
     except Exception as e:
         print(e)
         exit(1)
