@@ -19,11 +19,14 @@ not yet available for all banks. This program uses the PSD2 standard to enable t
 
 ## Supported banks
 
-Any bank with PSD2 support should work. Please note that very few banks is verified, so some formatting issues can occur
-in especially the "payee"-field of YNAB. Please add an issue with your banks name and an example of the misformatting,
-and I will add a regex to clean the field before import.
+Any bank with PSD2 support and on Nordigen should work (2391 banks across 31 EEA countries). Please note that very few
+banks is
+verified, so some
+formatting issues might occur
+in the "payee"-field of YNAB. Please add an issue with your banks name and an example of the misformatting,
+and I will add a regex to clean the field before import. Contributions are also welcome.
 
-[List of available banks](https://github.com/henricson/psd2ynabsync/blob/main/supported_banks.md)
+[List of available banks](https://nordigen.com/en/coverage/)
 
 ## Requirements
 
