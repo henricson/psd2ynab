@@ -18,13 +18,7 @@ This program uses Nordigen to access your financial information. Nordigen is a t
 this project in any way. Please read
 their [End User Privacy Policy](https://nordigen.com/en/company/privacy-policy-end-user/).
 
-**⚠️ Nordigen has a freemium model, and might sell anonymized or pseudonymized data to third parties, possibly including
-your
-transaction details! ⚠️**
-
-This project is looking for options to replace Nordigen with a more privacy-friendly alternative. However, a direct PSD2
-integration towards banks seems tedious, and it requires a lot of compliance related work and fees to authorities. Input
-is valued!
+**⚠️ Nordigen has a freemium model, and might use your data for other purposes! ⚠️**
 
 [Details about the privacy issue](https://github.com/henricson/psd2ynab/issues/1).
 
