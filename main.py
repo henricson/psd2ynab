@@ -109,15 +109,16 @@ def clean_text(rgx_list, text):
 
 
 def map_transactions_to_ynab(psd2_transactions):
-    print(psd2_transactions)
     ynab_transactions = [{"account_id": ynab_account_id, "date": t.get("bookingDate"),
                           "amount": int(float(t.get("transactionAmount").get("amount")) * 100),
                           "payee_name": clean_text(
                               ["Visa, ", "Varekjøp, Kl\. [0-9]{2}.[0-9]{2} Versjon 2 Aut. [0-9]{6}, "],
                               t.get("creditorName", t.get("additionalInformation",
                                                           t.get("remittanceInformationUnstructured")))),
-                          "memo": t.get("additionalInformation"), "approved": True,
-                          "import_id": t.get("transactionId", t.get("internalTransactionId")).replace("_", "")} for t in
+                          "memo": t.get("additionalInformation", t.get("remittanceInformationUnstructured")),
+                          "approved": True,
+                          "import_id": t.get("transactionId", t.get("internalTransactionId")).replace("_", "")}
+                         for t in
                          transactions]
     print(ynab_transactions)
     return ynab_transactions
@@ -150,26 +151,31 @@ def prompt_bank():
 
 
 if __name__ == '__main__':
+    try:
+        token = aquire_token(nordgen_client_id, nordgen_client_secret)
+        banks = list_banks(token, country_code)
 
-    token = aquire_token(nordgen_client_id, nordgen_client_secret)
-    banks = list_banks(token, country_code)
-
-    bank_id = prompt_bank()
-    requisition = create_requisition(token, banks[int(bank_id)]["id"])
-    accounts = list_accounts(token, requisition["id"])
-    print(accounts)
-    available_account_ids = []
-    for (key, value) in enumerate(accounts):
-        account_details = get_account_details(token, value)
-        available_account_ids.append(str(key) + ": " + account_details["name"])
-    print("Select the account you want to import transactions from:")
-    for account in available_account_ids:
-        print(account)
-    account_id = input("Enter the index: ")
-    if not account_id.isdigit():
-        print("Please enter a valid number. Exiting.")
+        bank_id = prompt_bank()
+        requisition = create_requisition(token, banks[int(bank_id)]["id"])
+        accounts = list_accounts(token, requisition["id"])
+        print(accounts)
+        available_account_ids = []
+        for (key, value) in enumerate(accounts):
+            account_details = get_account_details(token, value)
+            available_account_ids.append(str(key) + ": " + account_details["name"])
+        print("Select the account you want to import transactions from:")
+        for account in available_account_ids:
+            print(account)
+        account_id = input("Enter the index: ")
+        if not account_id.isdigit():
+            print("Please enter a valid number. Exiting.")
+            exit(1)
+        transactions = list_transactions(token, accounts[int(account_id)])
+        ynab_transactions = map_transactions_to_ynab(transactions)
+        print(ynab_transactions)
+        import_response = ynab_upload_transactions(ynab_transactions)
+        print(str(len(ynab_transactions)) + " transactions uploaded to YNAB.")
+        print(import_response)
+    except Exception as e:
+        print(e)
         exit(1)
-    transactions = list_transactions(token, accounts[int(account_id)])
-    ynab_transactions = map_transactions_to_ynab(transactions)
-    ynab_upload_transactions(ynab_transactions)
-    print(str(len(ynab_transactions)) + " transactions uploaded to YNAB.")
