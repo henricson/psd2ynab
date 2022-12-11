@@ -57,3 +57,6 @@ and I will add a regex to clean the field before import. Contributions are also 
 
 Not all banks makes credit card accounts available through the PSD2 API, meaning only debit accounts can be used for
 importing.
+
+I have experienced that importing right after a deletion of a transaction in YNAB can cause the import to fail due to
+some sort of duplication detection. Please raise an issue if you are able to reproduce.
