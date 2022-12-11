@@ -23,7 +23,7 @@ your
 transaction details! ⚠️**
 
 This project is looking for options to replace Nordigen with a more privacy-friendly alternative. However, a direct PSD2
-integration towards banks seems tedious, as it requires a lot of compliance related work and fees to authorities. Input
+integration towards banks seems tedious, and it requires a lot of compliance related work and fees to authorities. Input
 is valued!
 
 ## Why does this exist
