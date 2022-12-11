@@ -10,7 +10,7 @@ PSD2-data.
 
 This program is provided as-is, without any warranty under the GNU GENERAL PUBLIC LICENSE v3. The author is not
 responsible for any damage caused by this program. Please be careful as this program will access your financial
-information.
+information (read-only).
 
 ## Why does this exist
 
