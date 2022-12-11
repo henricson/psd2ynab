@@ -16,7 +16,8 @@ This program uses Nordigen to access your financial information. Nordigen is a t
 this project in any way. Please read
 their [End User Privacy Policy](https://nordigen.com/en/company/privacy-policy-end-user/).
 
-**⚠️ Nordigen has a freemium model, and might sell anonymized or pseudonymized data to third parties, including your
+**⚠️ Nordigen has a freemium model, and might sell anonymized or pseudonymized data to third parties, possibly including
+your
 transaction details! ⚠️**
 
 ## Why does this exist
