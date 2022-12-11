@@ -1,0 +1,6 @@
+nordgen_client_id = ""
+nordgen_client_secret = ""
+ynab_personal_access_token = ""
+ynab_budget_id = ""
+ynab_account_id = ""
+country_code = ""
