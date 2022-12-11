@@ -1,6 +1,11 @@
 # Supported banks:
 
-The following banks are supported by this program. If your bank is not listed here, you can still try to use the
+[List of available banks](https://nordigen.com/en/coverage/). What limits the number of available banks is our
+middleman,
+Nordigen, not the program itself. Refer to the link for an updated list. The ones listed on this page are only for SEO
+purposes.
+
+Even if your bank is not verified, you can still try to use the
 program. It
 might work, but it might also not work. If you are experiencing problems, please open an issue. Verified means that the
 integration has been tested. Unverified banks should also work, but might have some extra text in front of the YNAB
@@ -12,6 +17,7 @@ regex.
 ### Verified
 
 - DNB
+- Sbanken
 
 ### Not verified
 
