@@ -110,14 +110,15 @@ def clean_text(rgx_list, text):
 
 def map_transactions_to_ynab(psd2_transactions):
     ynab_transactions = [{"account_id": ynab_account_id, "date": t.get("bookingDate"),
-                          "amount": int(float(t.get("transactionAmount").get("amount")) * 100),
+                          "amount": int(float(t.get("transactionAmount").get("amount")) * 1000),
                           "payee_name": clean_text(
                               ["Visa, ", "Varekjøp, Kl\. [0-9]{2}.[0-9]{2} Versjon 2 Aut. [0-9]{6}, "],
                               t.get("creditorName", t.get("additionalInformation",
                                                           t.get("remittanceInformationUnstructured")))),
                           "memo": t.get("additionalInformation", t.get("remittanceInformationUnstructured")),
                           "approved": True,
-                          "import_id": t.get("transactionId", t.get("internalTransactionId")).replace("_", "")}
+                          "import_id": t.get("transactionId", t.get("internalTransactionId")).replace("_",
+                                                                                                      "")}
                          for t in
                          transactions]
     print(ynab_transactions)
