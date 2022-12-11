@@ -7,6 +7,18 @@ from requests.exceptions import HTTPError
 from settings import *
 
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 def aquire_token(secret_id, secret_key):
     try:
         response = requests.post('https://ob.nordigen.com/api/v2/token/new/',
@@ -141,10 +153,11 @@ def ynab_upload_transactions(ynab_transactions):
 
 
 def prompt_bank():
-    print("Please select the bank you want to connect to (country code set to: " + country_code + "):")
+    print(
+        bcolors.UNDERLINE + "Please select the bank you want to connect to (country code set to: " + country_code + "):" + bcolors.ENDC)
     for (key, value) in enumerate(banks):
         print(str(key) + ": ", value["name"])
-    bank_id_local = input("\nEnter the index of the bank you wish to link: ")
+    bank_id_local = input(bcolors.OKCYAN + "\nEnter the index of the bank you wish to link: " + bcolors.ENDC)
     if not bank_id_local.isdigit():
         print("Please enter a valid number.")
         prompt_bank()
@@ -152,7 +165,7 @@ def prompt_bank():
 
 
 def prompt_account():
-    account_id_local = input("\nEnter the index of the account you wish to import: ")
+    account_id_local = input(bcolors.OKCYAN + "\nEnter the index of the account you wish to import: " + bcolors.ENDC)
     if not account_id_local.isdigit():
         print("Please enter a valid number.")
         prompt_account()
