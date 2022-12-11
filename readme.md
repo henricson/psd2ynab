@@ -1,6 +1,6 @@
 # The PSD2 You Need a Budget (YNAB) syncer (WIP)
 
-**This is a work in progress, but verified to work with DNB - a large Norwegian bank.**
+**This is a work in progress, but verified to work with the Norwegian banks DNB and Sbanken.**
 
 This Python program enables importing of transactions from many European banks using their PSD2 API. Due to regulations
 regarding direct use of PSD2, this program uses [Nordigen](https://nordigen.com/) as a middleman to access the
