@@ -26,6 +26,8 @@ This project is looking for options to replace Nordigen with a more privacy-frie
 integration towards banks seems tedious, and it requires a lot of compliance related work and fees to authorities. Input
 is valued!
 
+[Details about the privacy issue](https://github.com/henricson/psd2ynab/issues/1).
+
 ## Why does this exist
 
 YNAB has a feature for linked-import, meaning that YNAB can import transactions from your bank. However, this feature is
