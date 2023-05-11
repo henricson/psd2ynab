@@ -171,10 +171,23 @@ def prompt_account():
         prompt_account()
     return account_id_local
 
+def cache_user_input(bank_id, account_id):
+    with open('user_input_cache.json', 'w') as file:
+        json.dump({"bank_id": bank_id, "account_id": account_id}, file)
+
+def read_user_input_cache():
+    if os.path.exists('user_input_cache.json'):
+        with open('user_input_cache.json', 'r') as file:
+            user_input_cache = json.load(file)
+            return user_input_cache["bank_id"], user_input_cache["account_id"]
+    return None, None
+
+
 
 def get_account_task(value, token):
     account_details = get_account_details(token, value)
     return {"name": account_details["name"], "id": value}
+
 
 
 if __name__ == '__main__':
@@ -185,7 +198,11 @@ if __name__ == '__main__':
         token = aquire_token(nordgen_client_id, nordgen_client_secret)
         banks = list_banks(token, country_code)
 
-        bank_id = prompt_bank()
+        cached_bank_id, cached_account_id = read_user_input_cache()
+        if cached_bank_id is None:
+            bank_id = prompt_bank()
+        else:
+            bank_id = cached_bank_id
         requisition = create_requisition(token, banks[int(bank_id)]["id"])
         cache_requisition(requisition)
         accounts = list_accounts(token, requisition["id"])
@@ -198,7 +215,13 @@ if __name__ == '__main__':
                 available_account_ids.append(bank["id"])
                 print(str(key) + ": " + bank["name"])
 
-        account_id = prompt_account()
+        if cached_account_id is None:
+            account_id = prompt_account()
+        else:
+            account_id = cached_account_id
+
+        cache_user_input(bank_id, account_id)
+
         print("\nFetching and importing transactions into YNAB....\n")
         transactions = list_transactions(token, available_account_ids[int(account_id)])
         ynab_transactions = map_transactions_to_ynab(transactions)

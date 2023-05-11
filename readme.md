@@ -53,11 +53,12 @@ and I will add a regex to clean the field before import. Contributions are also 
 4. Fill in the required information in `settings.py`
 5. Run the program using `python main.py` each time you need to do an import
 
+## Set up as cron-job
+
 ## Future plans
 
 - Improve the CLI experience (short term)
 - Improve documentation (short term)
-- Support for persistent configuration (short term)
 - Support for multiple accounts (short term)
 - Add more regexes to unwanted bank-specific formatting (on request)
 - Add example config for linux systemd w/ timers (short term)
