@@ -55,6 +55,8 @@ and I will add a regex to clean the field before import. Contributions are also 
 
 ## Set up as cron-job
 
+As of now, this script supports persistence after the first manual run - that is after the first configuration. Please run the program manually once, and then use systemd to set up a service with a timer.
+
 ## Future plans
 
 - Improve the CLI experience (short term)
